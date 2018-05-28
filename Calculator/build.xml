@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Calculator" basedir="." default="run">
+
+	<property environment="env" />
+	<path id="project.classpath">
+		<pathelement path="${env.JUNIT}" />
+		<pathelement path="${env.HAMCREST_CORE}" />
+		<pathelement path="${user.dir}/bin" />
+		<pathelement path="${user.dir}/test/bin" />
+	</path>
+
+	<target name="init" depends="clean">
+		<mkdir dir="bin" />
+		<mkdir dir="test/bin" />
+	</target>
+
+	<target name="compile-class" depends="init">
+		<javac srcdir="src" destdir="bin" debug="on" includeantruntime="true">
+			<src path="src" />
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-test" depends="compile-class">
+		<javac srcdir="test/src" destdir="test/bin" debug="on" includeantruntime="true">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<target name="clean">
+		<delete dir="bin" />
+		<delete dir="test/bin" />
+	</target>
+
+	<target name="CalculatorTest" depends="compile-test" description="Run unit tests">
+		<junit printsummary="true" haltonfailure="true" fork="true">
+			<formatter type="plain" usefile="false" />
+			<test name="edu.umb.cs.cs680.hw01.CalculatorTest" />
+			<classpath refid="project.classpath" />
+		</junit>
+	</target>
+
+	<target name="run" depends="compile-test, CalculatorTest">
+		<java classname="edu/umb/cs/cs680/hw01/Calculator" classpath="bin" fork="true" />
+	</target>
+
+
+</project>
